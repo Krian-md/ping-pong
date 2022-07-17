@@ -1,28 +1,41 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <v-app> 
+    <v-container fill-height fluid> 
+      <v-row class="height-content">
+        <v-col md="7" sm="12">
+          <PingPong></PingPong>
+        </v-col>
+        <v-col md="5" sm="12">
+          <Dashboard></Dashboard>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-app>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import PingPong from '@/components/ping-pong/PingPong'
+import Dashboard from '@/components/ping-pong/Dashboard'
 
 export default {
   name: 'App',
+
   components: {
-    HelloWorld
-  }
-}
+    PingPong,
+    Dashboard
+  },
+
+  data: () => ({
+    //
+  }),
+};
 </script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  background: lightgray;
+}
+.height-content {
+  height: 80%;
 }
 </style>
