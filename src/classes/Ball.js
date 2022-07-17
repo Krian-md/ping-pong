@@ -51,7 +51,7 @@ export default class Ball extends Shape {
       this.posX - this.radius,
       this.posY - this.radius,
       this.radius * 2,
-      this.radius * 2
+      this.radius * 2,
     );
   }
 }

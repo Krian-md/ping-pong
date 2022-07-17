@@ -60,6 +60,7 @@ export default class Board {
   _getBoard() {
     return document.querySelector(this.boardSelector);
   }
+
   _getCanvas() {
     return document.querySelector(this.canvasSelector);
   }

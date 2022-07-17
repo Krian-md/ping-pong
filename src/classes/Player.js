@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-import movementStates from '@/enums/movementStates';
+import movementStates from "@/enums/movementStates";
 
 export default class Player {
   constructor(id, name, rocket) {
@@ -11,7 +11,7 @@ export default class Player {
   }
 
   addRocketMovementListener(keyUp, keyDown, board) {
-    window.addEventListener('keydown', (event) => {
+    window.addEventListener("keydown", (event) => {
       const key = event.code;
 
       if (key === keyUp) {

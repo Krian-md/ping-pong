@@ -54,13 +54,13 @@ export default class PingPong {
     this.players[0].addRocketMovementListener(
       movementStates.KEY_UP_FIRST_PLAYER,
       movementStates.KEY_DOWN_FIRST_PLAYER,
-      this.board
+      this.board,
     );
 
     this.players[1].addRocketMovementListener(
       movementStates.KEY_UP_SECOND_PLAYER,
       movementStates.KEY_DOWN_SECOND_PLAYER,
-      this.board
+      this.board,
     );
   }
 
@@ -100,7 +100,7 @@ export default class PingPong {
     const rocketSecondPlayer = shapeBuilder
       .setShape(new Rocket(this.canvasSelector))
       .setPositionX(
-        $canvas.width - appStates.PADDING_BOARD - appStates.WIDTH_ROCKET
+        $canvas.width - appStates.PADDING_BOARD - appStates.WIDTH_ROCKET,
       )
       .setPositionY($canvas.height / 2 - appStates.HEIGHT_ROCKET / 2)
       .setWidth(appStates.WIDTH_ROCKET)
