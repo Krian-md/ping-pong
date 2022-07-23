@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-import movementStates from "@/enums/movementStates";
+import movementStates from '@/enums/movementStates';
 
 export default class Player {
   constructor(id, name, rocket) {
@@ -10,14 +10,23 @@ export default class Player {
     this.point = 0;
   }
 
-  addRocketMovementListener(keyUp, keyDown, board) {
-    window.addEventListener("keydown", (event) => {
+  addMoveRocketListener(keyUp, keyDown, board) {
+    window.addEventListener('keydown', (event) => {
       const key = event.code;
 
       if (key === keyUp) {
-        this.rocket.move(movementStates.UP, board);
+        this.rocket.moveRocket(movementStates.UP, board);
       } else if (key === keyDown) {
-        this.rocket.move(movementStates.DOWN, board);
+        this.rocket.moveRocket(movementStates.DOWN, board);
+      }
+    });
+  }
+
+  cancelMoveRocketListener(keyUp, keyDown) {
+    window.addEventListener('keyup', (event) => {
+      const key = event.code;
+      if (key === keyUp || key === keyDown) {
+        this.rocket.cancelMove();
       }
     });
   }
@@ -32,5 +41,13 @@ export default class Player {
 
   getPoint() {
     return this.point;
+  }
+
+  setRocket(rocket) {
+    this.rocket = rocket;
+  }
+
+  resetPoint() {
+    this.point = 0;
   }
 }

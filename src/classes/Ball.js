@@ -1,10 +1,14 @@
 'use strict';
 
 import Shape from '@/classes/Shape';
+import appStates from '@/enums/appStates';
 
 export default class Ball extends Shape {
-  constructor(canvasSelector) {
-    super(canvasSelector);
+  constructor(builderData) {
+    super(builderData);
+    this.radius = builderData.radius;
+    this.deltaX = builderData.deltaX;
+    this.deltaY = builderData.deltaY;
   }
 
   getRadius() {
@@ -48,10 +52,10 @@ export default class Ball extends Shape {
     const context = $canvas.getContext('2d');
 
     context.clearRect(
-      this.posX - this.radius,
-      this.posY - this.radius,
-      this.radius * 2,
-      this.radius * 2,
+      this.posX - this.radius - appStates.SPEED_BALL_X,
+      this.posY - this.radius - appStates.SPEED_BALL_Y,
+      this.radius * 2 + appStates.SPEED_BALL_X * 2,
+      this.radius * 2 + appStates.SPEED_BALL_Y * 2
     );
   }
 }

@@ -1,7 +1,9 @@
 // TODO: implements builder pattern;
 export default class Shape {
-  constructor(canvasSelector) {
-    this.canvasSelector = canvasSelector;
+  constructor(builderData) {
+    this.canvasSelector = builderData.canvasSelector;
+    this.posX = builderData.posX;
+    this.posY = builderData.posY;
   }
 
   getPositionX() {

@@ -1,5 +1,7 @@
 <template>
   <v-app>
+    <Popup></Popup>
+
     <v-container fill-height fluid>
       <v-row class="height-content">
         <v-col md="7" sm="12">
@@ -16,6 +18,7 @@
 <script>
 import PingPong from '@/components/ping-pong/PingPong';
 import Dashboard from '@/components/ping-pong/Dashboard';
+import Popup from '@/components/UI/Popup';
 
 export default {
   name: 'App',
@@ -23,6 +26,7 @@ export default {
   components: {
     PingPong,
     Dashboard,
+    Popup,
   },
 
   data: () => ({

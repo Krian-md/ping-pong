@@ -36,25 +36,35 @@ export default class Board {
     const $canvas = this._getCanvas();
 
     const isCollisionUp =
-      ball.getPositionY() - ball.getRadius() < appStates.PADDING_BOARD;
+      ball.getPositionY() - ball.getRadius() <= appStates.PADDING_BOARD;
 
     const isCollisionDown =
-      ball.getPositionY() + ball.getRadius() >
-      $canvas.offsetHeight - appStates.PADDING_BOARD;
+      ball.getPositionY() + ball.getRadius() >=
+      $canvas.height - appStates.PADDING_BOARD;
 
     return isCollisionUp || isCollisionDown;
   }
 
   isCollisionRocket(rocket) {
+    return (
+      this.isCollisionRocketUp(rocket) || this.isCollisionRocketDown(rocket)
+    );
+  }
+
+  isCollisionRocketUp(rocket) {
+    const isCollisionUp =
+      rocket.getPositionY() + rocket.getDeltaY() <= appStates.PADDING_BOARD;
+    return isCollisionUp;
+  }
+
+  isCollisionRocketDown(rocket) {
     const $canvas = this._getCanvas();
 
-    const isCollisionUp = rocket.getPositionY() <= appStates.PADDING_BOARD;
-
     const isCollisionDown =
-      rocket.getPositionY() + rocket.getHeight() >=
+      rocket.getPositionY() + rocket.getHeight() + rocket.getDeltaY() >=
       $canvas.height - appStates.PADDING_BOARD;
 
-    return isCollisionUp || isCollisionDown;
+    return isCollisionDown;
   }
 
   _getBoard() {

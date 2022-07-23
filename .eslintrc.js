@@ -6,28 +6,27 @@ module.exports = {
   },
 
   extends: [
-    "plugin:vue/strongly-recommended",
-    "eslint:recommended",
-    "@vue/prettier",
-    "plugin:vue/essential",
-    "plugin:prettier/recommended",
+    'plugin:vue/strongly-recommended',
+    'eslint:recommended',
+    '@vue/prettier',
+    'plugin:prettier/recommended',
   ],
 
   parserOptions: {
-    parser: "@babel/eslint-parser",
+    parser: '@babel/eslint-parser',
   },
 
   rules: {
-    "prettier/prettier": [
-      "warn",
+    'prettier/prettier': [
+      'warn',
       {
         singleQuote: true,
         semi: true,
-        trailingComma: "all",
+        trailingComma: 'all',
       },
     ],
-    "vue/multi-word-component-names": "off",
-    "no-console": process.env.NODE_ENV === "production" ? "warn" : "off",
-    "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off",
+    'vue/multi-word-component-names': 'off',
+    'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+    'no-debugger': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
   },
 };

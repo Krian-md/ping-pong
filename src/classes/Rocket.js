@@ -5,8 +5,12 @@ import movementStates from '@/enums/movementStates';
 import appStates from '@/enums/appStates';
 
 export default class Rocket extends Shape {
-  constructor(canvasSelector) {
-    super(canvasSelector);
+  constructor(buildData) {
+    super(buildData);
+    this.width = buildData.width;
+    this.height = buildData.height;
+    this.deltaY = buildData.deltaY;
+    this.isPressKey = false;
   }
 
   getWidth() {
@@ -17,45 +21,72 @@ export default class Rocket extends Shape {
     return this.height;
   }
 
-  isCollision(ball, movevement) {
+  getDeltaY() {
+    return this.deltaY;
+  }
+
+  isCollisionBall(ball, movevement) {
     const isRightCollision =
-      ball.getPositionX() + ball.getRadius() + ball.getDeltaX() >
-        this.getPositionX() && movevement === movementStates.RIGHT;
+      ball.getPositionX() + ball.getRadius() + ball.getDeltaX() >=
+        this.getPositionX() &&
+      ball.getPositionX() - ball.getRadius() + ball.getDeltaX() <=
+        this.getPositionX() + this.getWidth() &&
+      movevement === movementStates.RIGHT;
 
     const isLeftCollision =
-      ball.getPositionX() - ball.getRadius() + ball.getDeltaX() <
+      ball.getPositionX() - ball.getRadius() + ball.getDeltaX() <=
         this.getPositionX() + this.getWidth() &&
+      ball.getPositionX() - ball.getRadius() + ball.getDeltaX() >=
+        this.getPositionX() &&
       movevement === movementStates.LEFT;
 
     const isVerticalZone =
-      ball.getPositionY() > this.getPositionY() &&
-      ball.getPositionY() < this.getPositionY() + this.getHeight();
+      ball.getPositionY() >= this.getPositionY() &&
+      ball.getPositionY() <= this.getPositionY() + this.getHeight();
 
     return (isRightCollision || isLeftCollision) && isVerticalZone;
   }
 
-  // TODO: unite bath methods
-
-  move(key, board) {
+  moveRocket(key, board) {
     const $canvas = this.getCanvas();
-
-    this.clear();
+    this.isPressKey = true;
 
     if (key === movementStates.UP) {
-      this.posY -= this.deltaY;
-
-      if (board.isCollisionRocket(this)) {
-        this.posY = appStates.PADDING_BOARD;
-      }
+      this.deltaY = -appStates.SPEED_ROCKET;
     } else if (key === movementStates.DOWN) {
-      this.posY += this.deltaY;
-
-      if (board.isCollisionRocket(this)) {
-        this.posY = $canvas.height - this.getHeight() - appStates.PADDING_BOARD;
-      }
+      this.deltaY = appStates.SPEED_ROCKET;
     }
 
-    this.draw();
+    if (board.isCollisionRocketUp(this)) {
+      this.posY = appStates.PADDING_BOARD + 1;
+      this.cancelMove();
+    }
+
+    if (board.isCollisionRocketDown(this)) {
+      this.posY =
+        $canvas.height - this.getHeight() - appStates.PADDING_BOARD - 1;
+      this.cancelMove();
+    }
+  }
+
+  updateParameters() {
+    if (this.isPressKey && !this._isCheckBehindBoard()) {
+      this.posY += this.getDeltaY();
+    }
+  }
+
+  _isCheckBehindBoard() {
+    const $canvas = this.getCanvas();
+
+    const isBehindBoard =
+      this.getPositionY() + this.getHeight() >= $canvas.height ||
+      this.getPositionY() <= appStates.PADDING_BOARD;
+
+    return isBehindBoard;
+  }
+
+  cancelMove() {
+    this.isPressKey = false;
   }
 
   draw() {
@@ -63,7 +94,12 @@ export default class Rocket extends Shape {
     const context = $canvas.getContext('2d');
 
     context.beginPath();
-    context.rect(this.posX, this.posY, this.width, this.height);
+    context.rect(
+      this.getPositionX(),
+      this.getPositionY(),
+      this.getWidth(),
+      this.getHeight()
+    );
     context.fillStyle = 'brown';
     context.fill();
     context.closePath();
@@ -73,6 +109,11 @@ export default class Rocket extends Shape {
     const $canvas = this.getCanvas();
     const context = $canvas.getContext('2d');
 
-    context.clearRect(this.posX, this.posY, this.width, this.height);
+    context.clearRect(
+      this.getPositionX(),
+      this.getPositionY() - appStates.PADDING_BOARD,
+      this.getWidth(),
+      this.getHeight() + appStates.PADDING_BOARD * 2.1
+    );
   }
 }
