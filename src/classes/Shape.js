@@ -1,4 +1,3 @@
-// TODO: implements builder pattern;
 export default class Shape {
   constructor(builderData) {
     this.canvasSelector = builderData.canvasSelector;

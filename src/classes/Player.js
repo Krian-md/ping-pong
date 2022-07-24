@@ -3,10 +3,10 @@
 import movementStates from '@/enums/movementStates';
 
 export default class Player {
-  constructor(id, name, rocket) {
+  constructor(id, name) {
     this.id = id;
     this.name = name;
-    this.rocket = rocket;
+    this.rocket = null;
     this.point = 0;
   }
 

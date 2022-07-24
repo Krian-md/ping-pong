@@ -13,10 +13,11 @@ export default {
   name: 'PingPong',
   mounted() {
     const game = new PingPong('#ping-pong', '#board', this.notify);
+    this.setGame(game);
     game.run();
   },
   methods: {
-    ...mapMutations(['increasePoint']),
+    ...mapMutations(['increasePoint', 'setGame']),
     ...mapActions(['victory']),
     notify({ name, data }) {
       switch (name) {

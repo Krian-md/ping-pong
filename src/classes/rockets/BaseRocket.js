@@ -4,12 +4,12 @@ import Shape from '@/classes/Shape';
 import movementStates from '@/enums/movementStates';
 import appStates from '@/enums/appStates';
 
-export default class Rocket extends Shape {
-  constructor(buildData) {
-    super(buildData);
-    this.width = buildData.width;
-    this.height = buildData.height;
-    this.deltaY = buildData.deltaY;
+export default class BaseRocket extends Shape {
+  constructor(builderData) {
+    super(builderData);
+    this.width = builderData.width;
+    this.height = builderData.height;
+    this.deltaY = builderData.deltaY;
     this.isPressKey = false;
   }
 
@@ -69,13 +69,7 @@ export default class Rocket extends Shape {
     }
   }
 
-  updateParameters() {
-    if (this.isPressKey && !this._isCheckBehindBoard()) {
-      this.posY += this.getDeltaY();
-    }
-  }
-
-  _isCheckBehindBoard() {
+  isCheckBehindBoard() {
     const $canvas = this.getCanvas();
 
     const isBehindBoard =

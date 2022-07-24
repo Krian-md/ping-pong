@@ -2,10 +2,11 @@
 
 import Board from '@/classes/Board';
 import Player from '@/classes/Player';
-import BuilderBall from '@/classes/BuilderBall';
-import BuilderRocket from '@/classes/BuilderRocket';
+import Factory from '@/classes/abstract-factories/Factory';
+import AccelerateFactory from '@/classes/abstract-factories/AccelerateFactory';
 
 import appStates from '@/enums/appStates';
+import optionsStates from '@/enums/optionsStates';
 import movementStates from '@/enums/movementStates';
 import notifyStates from '@/enums/notifyStates';
 import usersStates from '@/enums/usersStates';
@@ -17,20 +18,22 @@ export default class PingPong {
     this.notify = notify;
     this.ball = null;
     this.players = [];
+    this.factory = new Factory();
     this.idAnimationFrame = 0;
     this.isPlaying = false;
   }
 
   run() {
     this._initialization();
-    this._addPlayerListener();
+    this._addListeners();
+  }
 
-    window.addEventListener('keydown', (event) => {
-      if (event.code === movementStates.KEY_START_GAME && !this.isPlaying) {
-        this._animation(this._move.bind(this));
-        this.isPlaying = true;
-      }
-    });
+  setFactory(factory) {
+    if (factory === optionsStates.ACCELERATION) {
+      this.factory = new AccelerateFactory();
+    } else {
+      this.factory = new Factory();
+    }
   }
 
   _move() {
@@ -109,7 +112,7 @@ export default class PingPong {
     this._paintMainShape();
   }
 
-  _addPlayerListener() {
+  _addListeners() {
     this.players[0].addMoveRocketListener(
       movementStates.KEY_UP_FIRST_PLAYER,
       movementStates.KEY_DOWN_FIRST_PLAYER,
@@ -131,6 +134,13 @@ export default class PingPong {
       movementStates.KEY_UP_SECOND_PLAYER,
       movementStates.KEY_DOWN_SECOND_PLAYER
     );
+
+    window.addEventListener('keydown', (event) => {
+      if (event.code === movementStates.KEY_START_GAME && !this.isPlaying) {
+        this._animation(this._move.bind(this));
+        this.isPlaying = true;
+      }
+    });
   }
 
   _connetionPlayers() {
@@ -142,45 +152,28 @@ export default class PingPong {
 
   _createBall() {
     const $canvas = this._getCanvas();
-    const builderBall = new BuilderBall();
-
-    this.ball = builderBall
-      .setCanvasSelector(this.canvasSelector)
-      .setPositionX($canvas.width / 2 - appStates.RADIUS_BALL / 2)
-      .setPositionY($canvas.height / 2 + appStates.RADIUS_BALL / 2)
-      .setRadius(appStates.RADIUS_BALL)
-      .setDeltaX(-2)
-      .setDeltaY(2)
-      .build();
+    this.ball = this.factory.createBall(
+      this.canvasSelector,
+      $canvas.width / 2,
+      $canvas.height / 2
+    );
   }
 
   _createRockets() {
     const $canvas = this._getCanvas();
 
-    const builderRocket = new BuilderRocket();
-
-    const rocketFirstPlayer = builderRocket
-      .setCanvasSelector(this.canvasSelector)
-      .setPositionX(appStates.PADDING_BOARD)
-      .setPositionY($canvas.height / 2 - appStates.HEIGHT_ROCKET / 2)
-      .setWidth(appStates.WIDTH_ROCKET)
-      .setHeight(appStates.HEIGHT_ROCKET)
-      .setDeltaY(15)
-      .build();
-
+    const rocketFirstPlayer = this.factory.createRocket(
+      this.canvasSelector,
+      appStates.PADDING_BOARD,
+      $canvas.height / 2 - appStates.HEIGHT_ROCKET / 2
+    );
     this.players[0].setRocket(rocketFirstPlayer);
 
-    const rocketSecondPlayer = builderRocket
-      .setCanvasSelector(this.canvasSelector)
-      .setPositionX(
-        $canvas.width - appStates.PADDING_BOARD - appStates.WIDTH_ROCKET
-      )
-      .setPositionY($canvas.height / 2 - appStates.HEIGHT_ROCKET / 2)
-      .setWidth(appStates.WIDTH_ROCKET)
-      .setHeight(appStates.HEIGHT_ROCKET)
-      .setDeltaY(15)
-      .build();
-
+    const rocketSecondPlayer = this.factory.createRocket(
+      this.canvasSelector,
+      $canvas.width - appStates.PADDING_BOARD - appStates.WIDTH_ROCKET,
+      $canvas.height / 2 - appStates.HEIGHT_ROCKET / 2
+    );
     this.players[1].setRocket(rocketSecondPlayer);
   }
 
@@ -197,8 +190,12 @@ export default class PingPong {
     const context = $canvas.getContext('2d');
     context.clearRect(0, 0, $canvas.width, $canvas.height);
 
+    console.log(this.factory);
+
     this._createBall();
     this._createRockets();
+    console.log(this.ball);
+    console.log(this.players);
     this._paintMainShape();
     this.isPlaying = false;
   }

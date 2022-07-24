@@ -7,6 +7,7 @@ const appStates = {
   SPEED_BALL_Y: 1.5,
   PADDING_BOARD: 5,
   VICTORY_POINT: 10,
+  ACCELERATION: 1.01,
 };
 
 Object.freeze(appStates);

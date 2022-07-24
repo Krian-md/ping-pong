@@ -10,14 +10,14 @@
       </p>
 
       <h4>Options:</h4>
-      <div>
-        <!--<p>{{ selected }}</p> -->
+      <div id="options">
         <v-checkbox
           v-model="selected"
           v-for="option in options"
           :key="option.name"
           :label="option.name"
           :value="option.value"
+          @click="option.method"
           dark
           dense
         ></v-checkbox>
@@ -34,6 +34,8 @@
 </template>
 
 <script>
+import optionsStates from '@/enums/optionsStates';
+
 export default {
   name: 'Dashboard',
   data() {
@@ -41,17 +43,18 @@ export default {
       options: [
         {
           name: 'Add accselleration elements',
-          value: 'acceleration',
+          value: optionsStates.ACCELERATION,
+          method: this.updateAccelerationOption,
         },
         {
           name: 'Add bonuses',
-          value: 'bonuses',
+          value: optionsStates.BONUSES,
+          method: this.updateBonusesOption,
         },
       ],
       selected: [],
     };
   },
-
   computed: {
     getFirstPlayer() {
       return this.$store.getters.getFirstPlayer;
@@ -59,7 +62,27 @@ export default {
     getSecondPlayer() {
       return this.$store.getters.getSecondPlayer;
     },
+    getGame() {
+      return this.$store.getters.getGame;
+    },
   },
+  methods: {
+    updateAccelerationOption() {
+      console.log(this.selected);
+
+      const isChecked = this.selected.every(
+        (value) => value === optionsStates.ACCELERATION
+      );
+
+      if (isChecked) {
+        this.$store.commit('setFactory', optionsStates.ACCELERATION);
+      }
+    },
+    updateBonusesOption() {
+      console.log(this.selected);
+    },
+  },
+  mounted() {},
 };
 </script>
 

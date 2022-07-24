@@ -3,7 +3,7 @@
 import Shape from '@/classes/Shape';
 import appStates from '@/enums/appStates';
 
-export default class Ball extends Shape {
+export default class BaseBall extends Shape {
   constructor(builderData) {
     super(builderData);
     this.radius = builderData.radius;
@@ -29,11 +29,6 @@ export default class Ball extends Shape {
 
   changeMovementDeltaY() {
     this.deltaY = -this.deltaY;
-  }
-
-  updateParameters() {
-    this.posX += this.deltaX;
-    this.posY += this.deltaY;
   }
 
   draw() {
